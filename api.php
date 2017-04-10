@@ -14,13 +14,12 @@
     $link = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
 
     // retrieve the table and key from the path
-    echo json_encode($request)."<br>";
     $table = array_shift($request);
     if($table === 'users'){
         echo "TABLE: " . $table . "<br>";
         $key = array_shift($request);        
         if(empty($key)){
-            echo "<br>EMPTY<br>";
+            echo "<br>KEY: empty<br>";
         }
         else{
             echo "<br>KEY: " . $key . "<br>";
@@ -52,7 +51,6 @@
     switch ($method) {                                          //Depending on the HTTP_REQUEST...
     case 'GET':
         $sql = "select * from $table".($key?" WHERE users_name='$key'":'');   //----------->>>WRONG OPTION
-        echo $sql."<br>";
         $result = $link->query($sql);                                 // You must avoid the SQL injection hack
         break;
     case 'PUT':
