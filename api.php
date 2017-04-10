@@ -1,10 +1,10 @@
 <?php
 
     // get the HTTP method, path and body of the request
-    $method = $_SERVER['REQUEST_METHOD'];        
-    $request = explode('/', trim($_SERVER['REQUEST_URI'], '/') );     //obtiene la informacion de la URL
-    array_shift($request);                                            //pops first element
-    $input = json_decode(file_get_contents('php://input'),true);  //json_decode input?
+    $method = $_SERVER['REQUEST_METHOD'];                               // METHOD
+    $request = explode('/', trim($_SERVER['REQUEST_URI'], '/') );       // URL INFO
+    array_shift($request);                                              // POP 1ST
+    $input = json_decode(file_get_contents('php://input'),true);        // json_decode input?
 
     //DATABASE CONNECTION
     $host = "localhost";
@@ -14,6 +14,7 @@
     $link = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
 
     // retrieve the table and key from the path
+    echo json_encode($request)."<br>";
     $table = array_shift($request);
     if($table === 'users'){
         echo "TABLE: " . $table . "<br>";
@@ -34,24 +35,23 @@
     // escape the columns and values from the input object
     $columns = preg_replace('/[^a-z0-9_]+/i','',array_keys($input));  //return all the keys of the input array
     $values = array_map(function ($value) use ($link) {         //Crea un array con todos los valores obtenidos del input
-    if ($value===null) return null;
-    return (string)$value;
+        if ($value===null) return null;
+        return (string)$value;
     },array_values($input));                                    //Devuelve el array indexado
 
     // build the SET part of the SQL command
     $set = '';                                                  //non-easy to read SQL sentence
     for ($i=0;$i<count($columns);$i++) {
-    $set.=($i>0?',':'').'`'.$columns[$i].'`=';
-    $set.=($values[$i]===null?'NULL':'"'.$values[$i].'"');
+        $set.=($i>0?',':'').'`'.$columns[$i].'`=';
+        $set.=($values[$i]===null?'NULL':'"'.$values[$i].'"');
     }
-
     echo $set."<br>";
 
     // create SQL based on HTTP method
     $result='';
     switch ($method) {                                          //Depending on the HTTP_REQUEST...
     case 'GET':
-        $sql = "select * from `$table`".($key?" WHERE id=$key":'');   //----------->>>WRONG OPTION
+        $sql = "select * from '$table'".($key?" WHERE users_name='$key'":'');   //----------->>>WRONG OPTION
         $result = $link->query($sql);                                 // You must avoid the SQL injection hack
         break;
     case 'PUT':
@@ -78,13 +78,10 @@
 
     // print results, insert id or affected row count
     if ($method == 'GET') {                                       //GET
-        if (!$key) echo '[<br>';            
+        if (!$key) echo '[<br>';         
         foreach ($result as $row) {
-            echo json_encode($row)."<br>";
-        }                                                           //return results
-        // for ($i=0;$i<count($result);$i++) {
-        //   echo ($i>0?',':'').json_encode($result[$i]);
-        // }
+            echo $row['users_name'] . "<br>";
+        } 
         if (!$key) echo ']';                                        
     } elseif ($method == 'POST') {                                //POST
         echo $link->lastInsertId();                               // SQL insert "sentence"
