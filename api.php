@@ -4,7 +4,7 @@
     $method = $_SERVER['REQUEST_METHOD'];                               // METHOD
     $request = explode('/', trim($_SERVER['REQUEST_URI'], '/') );       // URL INFO
     array_shift($request);                                              // POP 1ST
-    $input = json_decode(file_get_contents('php://input'),true);        // json_decode input?
+    // $input = json_decode(file_get_contents('php://input'),true);        // json_decode input?
 
     //DATABASE CONNECTION
     $host = "localhost";
@@ -32,26 +32,27 @@
         exit;
     }
 
-    // escape the columns and values from the input object
-    $columns = preg_replace('/[^a-z0-9_]+/i','',array_keys($input));  //return all the keys of the input array
-    $values = array_map(function ($value) use ($link) {         //Crea un array con todos los valores obtenidos del input
-        if ($value===null) return null;
-        return (string)$value;
-    },array_values($input));                                    //Devuelve el array indexado
+    // // escape the columns and values from the input object
+    // $columns = preg_replace('/[^a-z0-9_]+/i','',array_keys($input));  //return all the keys of the input array
+    // $values = array_map(function ($value) use ($link) {         //Crea un array con todos los valores obtenidos del input
+    //     if ($value===null) return null;
+    //     return (string)$value;
+    // },array_values($input));                                    //Devuelve el array indexado
 
     // build the SET part of the SQL command
-    $set = '';                                                  //non-easy to read SQL sentence
-    for ($i=0;$i<count($columns);$i++) {
-        $set.=($i>0?',':'').'`'.$columns[$i].'`=';
-        $set.=($values[$i]===null?'NULL':'"'.$values[$i].'"');
-    }
-    echo $set."<br>";
+    // $set = '';                                                  //non-easy to read SQL sentence
+    // for ($i=0;$i<count($columns);$i++) {
+    //     $set.=($i>0?',':'').'`'.$columns[$i].'`=';
+    //     $set.=($values[$i]===null?'NULL':'"'.$values[$i].'"');
+    // }
+    // echo $set."<br>";
 
     // create SQL based on HTTP method
     $result='';
     switch ($method) {                                          //Depending on the HTTP_REQUEST...
     case 'GET':
-        $sql = "select * from '$table'".($key?" WHERE users_name='$key'":'');   //----------->>>WRONG OPTION
+        $sql = "select * from $table".($key?" WHERE users_name='$key'":'');   //----------->>>WRONG OPTION
+        echo $sql."<br>";
         $result = $link->query($sql);                                 // You must avoid the SQL injection hack
         break;
     case 'PUT':
