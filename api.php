@@ -4,7 +4,7 @@
     $method = $_SERVER['REQUEST_METHOD'];                               // METHOD
     $request = explode('/', trim($_SERVER['REQUEST_URI'], '/') );       // URL INFO
     array_shift($request);                                              // POP 1ST
-    // $input = json_decode(file_get_contents('php://input'),true);        // json_decode input?
+    echo file_get_contents('php://input');       // RETRIEVE POST DATA
 
     //DATABASE CONNECTION
     $host = "localhost";
@@ -31,12 +31,16 @@
         exit;
     }
 
-    // // escape the columns and values from the input object
+    // escape the columns and values from the input object
     // $columns = preg_replace('/[^a-z0-9_]+/i','',array_keys($input));  //return all the keys of the input array
-    // $values = array_map(function ($value) use ($link) {         //Crea un array con todos los valores obtenidos del input
-    //     if ($value===null) return null;
-    //     return (string)$value;
-    // },array_values($input));                                    //Devuelve el array indexado
+    $values = array_map(function ($value) {         //Crea un array con todos los valores obtenidos del input
+        if ($value===null) return null;
+        return (string)$value;
+    },array_values($input));                                    //Devuelve el array indexado
+
+    foreach ($value as $v ) {
+        echo $v . "@<br>";
+    }
 
     // build the SET part of the SQL command
     // $set = '';                                                  //non-easy to read SQL sentence
@@ -58,9 +62,10 @@
         $result = $sentence->execute(array(':table' => $table, ':set' => $set, ':key' => $key));
         break;
     case 'POST':
-        $sql = "insert into `$table` set $set"; 
-        $sentence = $link->prepare("insert into :table set :set");
-        $result = $sentence->execute(array(':table' => $table, ':set' => $set));
+        echo "@POST works";
+        // $sql = "insert into `$table` set $set"; 
+        // $sentence = $link->prepare("insert into :table set :set");
+        // $result = $sentence->execute(array(':table' => $table, ':set' => $set));
         break;
     case 'DELETE':
         $sql = "delete `$table` where id=$key"; 
