@@ -4,7 +4,8 @@
     $method = $_SERVER['REQUEST_METHOD'];                               // METHOD
     $request = explode('/', trim($_SERVER['REQUEST_URI'], '/') );       // URL INFO
     array_shift($request);                                              // POP 1ST
-    echo file_get_contents('php://input');       // RETRIEVE POST DATA
+    echo json_decode(file_get_contents('php://input'));             // RETRIEVE POST DATA
+
 
     //DATABASE CONNECTION
     $host = "localhost";
