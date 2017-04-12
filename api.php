@@ -4,8 +4,7 @@
     $method = $_SERVER['REQUEST_METHOD'];                               // METHOD
     $request = explode('/', trim($_SERVER['REQUEST_URI'], '/') );       // URL INFO
     array_shift($request);                                              // POP 1ST
-    echo json_decode(file_get_contents('php://input'));             // RETRIEVE POST DATA
-
+    $input = json_decode(file_get_contents('php://input'), true);       // RETRIEVE POST DATA      
 
     //DATABASE CONNECTION
     $host = "localhost";
@@ -36,6 +35,7 @@
     // $columns = preg_replace('/[^a-z0-9_]+/i','',array_keys($input));  //return all the keys of the input array
     $values = array_map(function ($value) {         //Crea un array con todos los valores obtenidos del input
         if ($value===null) return null;
+        echo $value . "<br>";
         return (string)$value;
     },array_values($input));                                    //Devuelve el array indexado
 
