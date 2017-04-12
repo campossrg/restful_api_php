@@ -1,6 +1,5 @@
 <?php
 
-    // get the HTTP method, path and body of the request
     $method = $_SERVER['REQUEST_METHOD'];                               // METHOD
     $request = explode('/', trim($_SERVER['REQUEST_URI'], '/') );       // URL INFO
     array_shift($request);                                              // POP 1ST
@@ -31,17 +30,11 @@
         exit;
     }
 
-    // escape the columns and values from the input object
-    // $columns = preg_replace('/[^a-z0-9_]+/i','',array_keys($input));  //return all the keys of the input array
-    $values = array_map(function ($value) {         //Crea un array con todos los valores obtenidos del input
-        if ($value===null) return null;
-        echo $value . "<br>";
-        return (string)$value;
-    },array_values($input));                                    //Devuelve el array indexado
-
-    foreach ($value as $v ) {
-        echo $v . "@<br>";
-    }
+    // return an array with all the input´s values
+    $values = array_map(function ($value) {         
+        if ($value['value']===null) return null;
+        return $value['value'];
+    },$input);                                    
 
     // build the SET part of the SQL command
     // $set = '';                                                  //non-easy to read SQL sentence
