@@ -7,35 +7,18 @@
 </head>
 <body>
     <div id="div_contents">
-        <p>USERS CONTENT:</p>
+        <p>TABLE USERS CONTENT:</p>
+    </div>
+    <div id="div_get">
+        <p>Search name:</p>
+        <input type="text" name="txt_search">
+        <button type="input" value="btn_search" onclick="getJSON();">Search</button>
     </div>
     <div id="div_post">
-        <form id="form_data" method="POST" action="api.php/users/">
-            <p>Insert name</p>
-            <input type="text" name="txt_name">
-            <p>Insert surname</p>
-            <input type="text" name="txt_surname">
-        </form>
-        <button type="input" value="btn_send" onclick="sendJSON();">Send</button>
-        <script type="text/javascript">
-            function sendJSON(){
-                var data = JSON.stringify($("#form_data").serializeArray());
-                $.ajax({
-                    url: 'api.php/users',
-                    type: 'POST',
-                    data: data,
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    async: false,
-                    success: function(data) {
-                        return data;
-                    },
-                    error: function() {
-                        alert('Error occured');
-                    }
-                });
-            }
-        </script>
+        <p>Insert name</p>
+        <input type="text" name="txt_name">
+        <button type="input" value="btn_post" onclick="sendJSON();">Send</button>
     </div>
+    <script src="scripts.js"></script>
 </body>
 </html>
