@@ -1,8 +1,7 @@
-
 function getJSON(){
     var search = JSON.stringify($("#txt_search").val());
     $.ajax({
-        url: 'api.php/users',
+        url: 'api.php',
         type: 'GET',
         data: search,
         contentType: 'application/json',
@@ -15,7 +14,7 @@ function getJSON(){
 }
 
 function sendJSON(){
-    var data = JSON.stringify($("#form_data").serializeArray());
+    var data = JSON.stringify($("#txt_name").val());
     $.ajax({
         url: 'api.php/users',
         type: 'POST',

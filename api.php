@@ -2,8 +2,9 @@
 
     $method = $_SERVER['REQUEST_METHOD'];                               // METHOD
     $request = explode('/', trim($_SERVER['REQUEST_URI'], '/') );       // URL INFO
-    array_shift($request);                                              // POP 1ST
-    $input = json_decode(file_get_contents('php://input'), true);       // RETRIEVE POST DATA      
+    echo $_SERVER['REQUEST_URI'] "\n";
+    echo array_shift($request);                                              // POP 1ST
+    $input = json_decode(file_get_contents('php://input'), true);       // RETRIEVE POST DATA
 
     //DATABASE CONNECTION
     $host = "localhost";
@@ -14,8 +15,9 @@
 
     // retrieve the table and key from the path
     $table = array_shift($request);
+    echo "\n" . $table . "Que es esto \n";
     if($table === 'users'){
-        $key = array_shift($request);        
+        $key = array_shift($request);
         if(empty($key)){
             echo "<br>KEY: empty<br>";
         }
@@ -30,13 +32,14 @@
     }
 
     // return an array with all the input´s values
-    $values = array_map(function ($value) {         
+    $values = array_map(function ($value) {
         if ($value['value']===null) return null;
         return $value['value'];
-    },$input);                                    
+    },$input);
+    echo "\n===" . json_encode($values) . "===\n";
 
     // build the SET part of the SQL command
-    $set = $values[0];       
+    $set = $values[0];
     // for ($i=0;$i<count($columns);$i++) {
     //     $set.=($i>0?',':'').'`'.$columns[$i].'`=';
     //     $set.=($values[$i]===null?'NULL':'"'.$values[$i].'"');
@@ -58,12 +61,12 @@
         $result = $sentence->execute(array('set' => $set));
         break;
     case 'DELETE':
-        // $sql = "delete `$table` where id=$key"; 
+        // $sql = "delete `$table` where id=$key";
         // $sentence = $link->prepare("delete :table where id= :key");
         // $result = $sentence->execute(array(':table' => $table, ':key' => $key));
         // break;
     }
-      
+
     // die if SQL statement failed
     if (!$result) {
         http_response_code(404);        //return 404 error page
@@ -72,11 +75,11 @@
 
     // print results, insert id or affected row count
     if ($method == 'GET') {                                       //GET
-        if (!$key) echo '[<br>';         
+        if (!$key) echo '[<br>';
         foreach ($result as $row) {
             echo $row['users_name'] . "<br>";
-        } 
-        if (!$key) echo ']';                                        
+        }
+        if (!$key) echo ']';
     } elseif ($method == 'POST') {                                //POST
         echo $link->lastInsertId();                               // SQL insert "sentence"
     } else {
