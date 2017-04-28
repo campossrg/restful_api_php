@@ -1,13 +1,12 @@
 function funcGET(){
     var search = $("#txt_search").val();
     $.ajax({
-        url: 'api.php',
+        url: 'api.php/users/' + search,
         type: 'GET',
-        data: search,
         dataType: 'json',
-        async: false,
-        success: function(search) {
-            alert("search");
+        success: function(response) {
+            alert("right");
+            alert(response);
         }
     });
 }

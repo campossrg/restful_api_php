@@ -1,6 +1,6 @@
 <?php
 
-    $method = $_SERVER['REQUEST_METHOD'];                               // METHOD
+    $method = $_SERVER['REQUEST_METHOD'];
     $request = explode('/', trim($_SERVER['REQUEST_URI'], '/') );       // URL INFO
     array_shift($request);                                              // POP 1ST
     $input = json_decode(file_get_contents('php://input'), true);       // RETRIEVE POST DATA
@@ -17,10 +17,10 @@
     if($table === 'users'){
         $key = array_shift($request);
         if(empty($key)){
-            echo "<br>KEY: empty<br>";
+            echo "\nKEY: empty\n";
         }
         else{
-            echo "<br>KEY: " . $key . "<br>";
+            echo "\nKEY: " . $key . "\n";
         }
     } else {
         // Deny resources different to 'users'
@@ -34,7 +34,6 @@
         if ($value['value']===null) return null;
         return $value['value'];
     },$input);
-    echo "\n===" . json_encode($values) . "===\n";
 
     // build the SET part of the SQL command
     $set = $values[0];
@@ -67,6 +66,7 @@
 
     // die if SQL statement failed
     if (!$result) {
+        echo "\nIt didn't worked!!\n";
         http_response_code(404);        //return 404 error page
         $link = null;                   //close conn
     }
