@@ -2,8 +2,7 @@
 
     $method = $_SERVER['REQUEST_METHOD'];                               // METHOD
     $request = explode('/', trim($_SERVER['REQUEST_URI'], '/') );       // URL INFO
-    echo $_SERVER['REQUEST_URI'] "\n";
-    echo array_shift($request);                                              // POP 1ST
+    array_shift($request);                                              // POP 1ST
     $input = json_decode(file_get_contents('php://input'), true);       // RETRIEVE POST DATA
 
     //DATABASE CONNECTION
@@ -15,7 +14,6 @@
 
     // retrieve the table and key from the path
     $table = array_shift($request);
-    echo "\n" . $table . "Que es esto \n";
     if($table === 'users'){
         $key = array_shift($request);
         if(empty($key)){

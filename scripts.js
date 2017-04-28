@@ -1,19 +1,18 @@
-function getJSON(){
-    var search = JSON.stringify($("#txt_search").val());
+function funcGET(){
+    var search = $("#txt_search").val();
     $.ajax({
         url: 'api.php',
         type: 'GET',
         data: search,
-        contentType: 'application/json',
         dataType: 'json',
         async: false,
         success: function(search) {
-            return search;
+            alert("search");
         }
     });
 }
 
-function sendJSON(){
+function funcPOST(){
     var data = JSON.stringify($("#txt_name").val());
     $.ajax({
         url: 'api.php/users',
