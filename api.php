@@ -31,12 +31,18 @@
 
     // return an array with all the input´s values
     $values = array_map(function ($value) {
-        if ($value['value']===null) return null;
-        return $value['value'];
+        // FIX THIS LOOP - IT DOESN'T START
+        if ($value===null) return null;
+        // if ($value['value']===null) return null;
+        echo "\n" . $value . "<---\n";
+        return $value;
     },$input);
+    echo "\n===" . json_encode($input) . "===\n";
+    echo "\n===" . json_encode($values) . "===\n";
 
     // build the SET part of the SQL command
     $set = $values[0];
+    echo "\n===" . $set . "===\n";
     // for ($i=0;$i<count($columns);$i++) {
     //     $set.=($i>0?',':'').'`'.$columns[$i].'`=';
     //     $set.=($values[$i]===null?'NULL':'"'.$values[$i].'"');
@@ -46,7 +52,7 @@
     $result='';
     switch ($method) {                                          //Depending on the HTTP_REQUEST...
     case 'GET':
-        $sql = "select * from $table".($key?" WHERE users_name='$key'":'');   //----------->>>WRONG OPTION
+        $sql = "select * from $table".($set?" WHERE users_name='$set'":'');   //----------->>>WRONG OPTION
         $result = $link->query($sql);                                 // You must avoid the SQL injection hack
         break;
     case 'PUT':
@@ -54,7 +60,7 @@
         // $result = $sentence->execute(array(':table' => $table, ':set' => $set, ':key' => $key));
         // break;
     case 'POST':
-        $sentence = $link->prepare("insert into users (users_name) values (:set)");
+        $sentence = $link->prepare("insert into $table (users_name) values (:set)");
         $result = $sentence->execute(array('set' => $set));
         break;
     case 'DELETE':
@@ -71,7 +77,7 @@
         $link = null;                   //close conn
     }
 
-    // print results, insert id or affected row count
+    // print results, insert id or affected row counts
     if ($method == 'GET') {                                       //GET
         if (!$key) echo '[<br>';
         foreach ($result as $row) {

@@ -4,6 +4,7 @@ function funcGET(){
         url: 'api.php/users/' + search,
         type: 'GET',
         dataType: 'json',
+        async: false,
         success: function(response) {
             alert("right");
             alert(response);
@@ -21,7 +22,7 @@ function funcPOST(){
         dataType: 'json',
         async: false,
         success: function(data) {
-            return data;
+            alert(data);
         }
     });
 }
