@@ -16,12 +16,12 @@
     $table = array_shift($request);
     if($table === 'users'){
         $key = array_shift($request);
-        if(empty($key)){
-            echo "\nKEY: empty\n";
-        }
-        else{
-            echo "\nKEY: " . $key . "\n";
-        }
+        // if(empty($key)){
+        //     echo "\nKEY: empty\n";
+        // }
+        // else{
+        //     echo "\nKEY: " . $key . "\n";
+        // }
     } else {
         // Deny resources different to 'users'
         echo "Resource must be 'users'";
@@ -36,7 +36,6 @@
     //     echo "\n" . $value . "<---\n";
     //     return $value;
     // },$input);
-    echo "\n===INPUT===" . json_encode($input) . "===\n";
 
     // build the SET part of the SQL command
     // $set = $values[0];

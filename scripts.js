@@ -5,8 +5,8 @@ function funcGET(){
         type: 'GET',
         dataType: 'json',
         async: false,
-        complete: function(response) {
-            console.log(response.responseText);
+        complete: function(data) {
+            console.log(data.responseText);
         }
     });
 }
@@ -20,8 +20,8 @@ function funcPOST(){
         contentType: 'application/json',
         dataType: 'json',
         async: false,
-        success: function(data) {
-            alert(data);
+        complete: function(data) {
+            console.log(data.responseText);
         }
     });
 }
