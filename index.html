@@ -10,9 +10,7 @@
         <table>
             <td>
                 <div id="div_get">
-                    <p>Search name:</p>
-                    <input type="text" id="txt_search">
-                    <button type="input" value="btn_search" onclick="funcGET();">Search</button>
+                    <input type="text" id="txt_search" placeholder="Insert value..">
                 </div>
             </td>
             <td>
@@ -26,11 +24,14 @@
                 <div id="div_options">
                     <table>
                         <tr>
+                            <td><button type="button" value="btn_search" onclick="funcGET();">Search</button></td>
+                        </tr>
+                        <tr>
                             <td><button type="button" name="btn_modify">Modify</button></td>
 
                         </tr>
                         <tr>
-                            <td><button type="button" name="btn_add">Add</button></td>
+                            <td><button type="button" value="btn_post" onclick="funcPOST();">Add</button></td>
                         </tr>
                         <tr>
                             <td><button type="button" name="btn_delete">Delete</button></td>
@@ -39,16 +40,6 @@
                 </div>
             </td>
         </table>
-        <div id="div_post">
-            <p>Insert name</p>
-            <input type="text" id="txt_name">
-            <button type="input" value="btn_post" onclick="funcPOST();">Send</button>
-        </div>
-        <div id="div_put">
-            <p>Modify name</p>
-            <input type="text" id="txt_name">
-            <button type="input" value="btn_post" onclick="funcPOST();">Send</button>
-        </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="scripts.js"></script>

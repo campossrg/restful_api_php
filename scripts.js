@@ -16,6 +16,7 @@ function funcGET(){
                 }));
             }
             $("#cls_results").attr('size', data_array.length);
+            $("#cls_results option:first").attr('selected', 'selected');
         }
     });
 }
