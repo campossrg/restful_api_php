@@ -30,19 +30,16 @@
     }
 
     // return an array with all the input´s values
-    $values = array_map(function ($value) {
-        // FIX THIS LOOP - IT DOESN'T START
-        if ($value===null) return null;
-        // if ($value['value']===null) return null;
-        echo "\n" . $value . "<---\n";
-        return $value;
-    },$input);
-    echo "\n===" . json_encode($input) . "===\n";
-    echo "\n===" . json_encode($values) . "===\n";
+    // $values = array_map(function ($value) {
+    //     if ($value===null) return null;
+    //     // if ($value['value']===null) return null;
+    //     echo "\n" . $value . "<---\n";
+    //     return $value;
+    // },$input);
+    echo "\n===INPUT===" . json_encode($input) . "===\n";
 
     // build the SET part of the SQL command
-    $set = $values[0];
-    echo "\n===" . $set . "===\n";
+    // $set = $values[0];
     // for ($i=0;$i<count($columns);$i++) {
     //     $set.=($i>0?',':'').'`'.$columns[$i].'`=';
     //     $set.=($values[$i]===null?'NULL':'"'.$values[$i].'"');
@@ -52,7 +49,7 @@
     $result='';
     switch ($method) {                                          //Depending on the HTTP_REQUEST...
     case 'GET':
-        $sql = "select * from $table".($set?" WHERE users_name='$set'":'');   //----------->>>WRONG OPTION
+        $sql = "select * from $table".($key?" WHERE users_name='$key'":'');   //----------->>>WRONG OPTION
         $result = $link->query($sql);                                 // You must avoid the SQL injection hack
         break;
     case 'PUT':
@@ -61,7 +58,7 @@
         // break;
     case 'POST':
         $sentence = $link->prepare("insert into $table (users_name) values (:set)");
-        $result = $sentence->execute(array('set' => $set));
+        $result = $sentence->execute(array('set' => $input));
         break;
     case 'DELETE':
         // $sql = "delete `$table` where id=$key";
@@ -79,11 +76,9 @@
 
     // print results, insert id or affected row counts
     if ($method == 'GET') {                                       //GET
-        if (!$key) echo '[<br>';
         foreach ($result as $row) {
-            echo $row['users_name'] . "<br>";
+            echo $row['users_name'];
         }
-        if (!$key) echo ']';
     } elseif ($method == 'POST') {                                //POST
         echo $link->lastInsertId();                               // SQL insert "sentence"
     } else {

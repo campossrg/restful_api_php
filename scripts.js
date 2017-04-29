@@ -5,9 +5,8 @@ function funcGET(){
         type: 'GET',
         dataType: 'json',
         async: false,
-        success: function(response) {
-            alert("right");
-            alert(response);
+        complete: function(response) {
+            console.log(response.responseText);
         }
     });
 }
