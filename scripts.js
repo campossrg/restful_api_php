@@ -6,7 +6,9 @@ function funcGET(){
         dataType: 'json',
         async: false,
         complete: function(data) {
-            console.log(data.responseText);
+            $("#txt_results").val(data.responseText);
+            no_lines = data.responseText.split("\n").length - 1; //avoid last one
+            $("#txt_results").attr('rows', no_lines); //modify no of rows
         }
     });
 }
@@ -21,7 +23,7 @@ function funcPOST(){
         dataType: 'json',
         async: false,
         complete: function(data) {
-            console.log(data.responseText);
+            alert(data.responseText);
         }
     });
 }

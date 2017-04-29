@@ -56,8 +56,16 @@
         // $result = $sentence->execute(array(':table' => $table, ':set' => $set, ':key' => $key));
         // break;
     case 'POST':
-        $sentence = $link->prepare("insert into $table (users_name) values (:set)");
-        $result = $sentence->execute(array('set' => $input));
+        $sql = "select * from $table where users_name ='$input'";
+        $result = $link->query($sql);
+        if($result){
+            echo "Sorry, there is already a user with this name";
+            exit;
+        }
+        else{
+            $sql = $link->prepare("insert into $table (users_name) values (:set)");
+            $result = $sql->execute(array('set' => $input));
+        }
         break;
     case 'DELETE':
         // $sql = "delete `$table` where id=$key";
@@ -76,10 +84,10 @@
     // print results, insert id or affected row counts
     if ($method == 'GET') {                                       //GET
         foreach ($result as $row) {
-            echo $row['users_name'];
+            echo $row['users_name'] . "\n";
         }
     } elseif ($method == 'POST') {                                //POST
-        echo $link->lastInsertId();                               // SQL insert "sentence"
+        echo $input . " inserted succesfully";                               // SQL insert "sentence"
     } else {
         echo $result->rowCount();                           // UPDATE or DELETE num of affected rows
     }
