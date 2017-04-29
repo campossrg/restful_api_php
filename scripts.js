@@ -6,9 +6,16 @@ function funcGET(){
         dataType: 'json',
         async: false,
         complete: function(data) {
-            $("#txt_results").val(data.responseText);
-            no_lines = data.responseText.split("\n").length - 1; //avoid last one
-            $("#txt_results").attr('rows', no_lines); //modify no of rows
+            data_array = data.responseText.split("\n");
+            data_array.pop();
+            $('#cls_results option').remove();
+            for(i=0; i<data_array.length; i++){
+                $('#cls_results').append($('<option>', {
+                    value: i,
+                    text: data_array[i]
+                }));
+            }
+            $("#cls_results").attr('size', data_array.length);
         }
     });
 }

@@ -1,9 +1,9 @@
 <?php
 
-    $method = $_SERVER['REQUEST_METHOD'];
+    $method = $_SERVER['REQUEST_METHOD'];                               // METHOD
     $request = explode('/', trim($_SERVER['REQUEST_URI'], '/') );       // URL INFO
-    array_shift($request);                                              // POP 1ST
-    $input = json_decode(file_get_contents('php://input'), true);       // RETRIEVE POST DATA
+    array_shift($request);
+    $input = json_decode(file_get_contents('php://input'), true);       // POST DATA
 
     //DATABASE CONNECTION
     $host = "localhost";
@@ -46,7 +46,7 @@
 
     // create SQL based on HTTP method
     $result='';
-    switch ($method) {                                          //Depending on the HTTP_REQUEST...
+    switch ($method) {
     case 'GET':
         $sql = "select * from $table".($key?" WHERE users_name='$key'":'');   //----------->>>WRONG OPTION
         $result = $link->query($sql);                                 // You must avoid the SQL injection hack
@@ -77,20 +77,20 @@
     // die if SQL statement failed
     if (!$result) {
         echo "\nIt didn't worked!!\n";
-        http_response_code(404);        //return 404 error page
-        $link = null;                   //close conn
+        http_response_code(404);
+        $link = null;
     }
 
-    // print results, insert id or affected row counts
-    if ($method == 'GET') {                                       //GET
+    // PRINT RESULTS
+    if ($method == 'GET') {
         foreach ($result as $row) {
             echo $row['users_name'] . "\n";
         }
-    } elseif ($method == 'POST') {                                //POST
-        echo $input . " inserted succesfully";                               // SQL insert "sentence"
+    } elseif ($method == 'POST') {
+        echo $input . " inserted succesfully";
     } else {
-        echo $result->rowCount();                           // UPDATE or DELETE num of affected rows
+        echo $result->rowCount();
     }
-    // close mysql connection
-    $link = null;                   //close conn
+
+    $link = null;
 ?>
