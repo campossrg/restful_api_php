@@ -45,7 +45,6 @@
     // }
 
     // create SQL based on HTTP method
-    $result='';
     switch ($method) {
     case 'GET':
         $sql = "select * from $table".($key?" WHERE users_name='$key'":'');   //----------->>>WRONG OPTION
@@ -56,9 +55,10 @@
         // $result = $sentence->execute(array(':table' => $table, ':set' => $set, ':key' => $key));
         // break;
     case 'POST':
+        echo $input;
         $sql = "select * from $table where users_name ='$input'";
         $result = $link->query($sql);
-        if($result){
+        if($result->rowCount() > 0){
             echo "Sorry, there is already a user with this name";
             exit;
         }
@@ -68,10 +68,9 @@
         }
         break;
     case 'DELETE':
-        // $sql = "delete `$table` where id=$key";
-        // $sentence = $link->prepare("delete :table where id= :key");
-        // $result = $sentence->execute(array(':table' => $table, ':key' => $key));
-        // break;
+        $sql = $link->prepare("delete from $table where users_name=:set");
+        $result = $sql->execute(array(':set' => $input));
+        break;
     }
 
     // die if SQL statement failed
@@ -79,6 +78,7 @@
         echo "\nIt didn't worked!!\n";
         http_response_code(404);
         $link = null;
+        exit;
     }
 
     // PRINT RESULTS
@@ -89,8 +89,8 @@
     } elseif ($method == 'POST') {
         echo $input . " inserted succesfully";
     } else {
-        echo $result->rowCount();
+        echo $input . " deleted succesfully";
     }
 
-    $link = null;
+    $link = null; //close conn
 ?>

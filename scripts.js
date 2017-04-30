@@ -8,21 +8,21 @@ function funcGET(){
         complete: function(data) {
             data_array = data.responseText.split("\n");
             data_array.pop();
-            $('#cls_results option').remove();
+            $('#sel_results option').remove();
             for(i=0; i<data_array.length; i++){
-                $('#cls_results').append($('<option>', {
+                $('#sel_results').append($('<option>', {
                     value: i,
                     text: data_array[i]
                 }));
             }
-            $("#cls_results").attr('size', data_array.length);
-            $("#cls_results option:first").attr('selected', 'selected');
+            $("#sel_results").attr('size', data_array.length);
+            $("#sel_results option:first").attr('selected', 'selected');
         }
     });
 }
 
 function funcPOST(){
-    var data = JSON.stringify($("#txt_name").val());
+    var data = JSON.stringify($("#txt_search").val());
     $.ajax({
         url: 'api.php/users',
         type: 'POST',
@@ -31,7 +31,23 @@ function funcPOST(){
         dataType: 'json',
         async: false,
         complete: function(data) {
-            alert(data.responseText);
+            console.log(data.responseText);
         }
     });
+}
+
+function funcDELETE(){
+    var data = JSON.stringify($("#sel_results option:selected").text());
+    $.ajax({
+        url: 'api.php/users',
+        type: 'DELETE',
+        data: data,
+        contentType: 'application/json',
+        dataType: 'json',
+        async: false,
+        complete: function(data){
+            $("#sel_results option:selected").remove();
+            console.log(data.responseText);
+        }
+    })
 }
