@@ -2,13 +2,13 @@ function funcGET(){
     var search = $("#txt_search").val();
 
     $.ajax({
-        url: 'api.php/users/' + search,
+        url: 'api.php/users/' + search,         // the value to search on url
         type: 'GET',
         dataType: 'json',
         async: false,
         complete: function(data) {
-            data_array = data.responseText.split("\n");
-            data_array.pop();
+            data_array = data.responseText.split("\n");     // retrieve an array with results
+            data_array.pop();                               // last one is empty
             $('#sel_results option').remove();
             for(i=0; i<data_array.length; i++){
                 $('#sel_results').append($('<option>', {
@@ -16,8 +16,8 @@ function funcGET(){
                     text: data_array[i]
                 }));
             }
-            $("#sel_results").attr('size', data_array.length);
-            $("#sel_results option:first").attr('selected', 'selected');
+            $("#sel_results").attr('size', data_array.length);              // change size
+            $("#sel_results option:first").attr('selected', 'selected');    // set selected
         }
     });
 }
@@ -35,8 +35,7 @@ function funcPOST(){
             dataType: 'json',
             async: false,
             complete: function(data) {
-                console.log(data.responseText);
-                funcGET();
+                funcGET();                  // refresh data
             }
         });
     }
@@ -54,8 +53,7 @@ function funcDELETE(){
         dataType: 'json',
         async: false,
         complete: function(data){
-            console.log(data.responseText);
-            funcGET();
+            funcGET();                      // refresh data
         }
     })
 }
@@ -65,15 +63,14 @@ function funcPUT(){
     var data = JSON.stringify(prompt("Inserted the desired value for selected item:", selected));
 
     $.ajax({
-        url: 'api.php/users/' + selected,
+        url: 'api.php/users/' + selected,       // old value
         type: 'PUT',
-        data: data,
+        data: data,                             // modified value
         contentType: 'application/json',
         dataType: 'json',
         async: false,
         complete: function(data){
-            console.log(data.responseText);
-            funcGET();
+            funcGET();                          // refresh data
         }
     })
 }

@@ -1,18 +1,19 @@
 <?php
 
+    // RECEIVE INFORMATION
     $method = $_SERVER['REQUEST_METHOD'];                               // METHOD
-    $request = explode('/', trim($_SERVER['REQUEST_URI'], '/') );       // URL INFO
+    $request = explode('/', trim($_SERVER['REQUEST_URI'], '/') );       // URI INFO
     array_shift($request);
     $input = json_decode(file_get_contents('php://input'), true);       // POST DATA
 
-    //DATABASE CONNECTION
+    // DATABASE CONNECTION
     $host = "localhost";
     $dbname = "db_rest";
     $user = "root";
     $pass = "admin";
     $link = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
 
-    // retrieve the table and key from the path
+    // RETRIEVE THE TABLE AND KEY FROM URI
     $table = array_shift($request);
     if($table === 'users'){
         $key = array_shift($request);
@@ -23,12 +24,12 @@
         exit;
     }
 
-    // create SQL based on HTTP method
+    // CREATE SQL SENTENCES FOR EACH METHOD
     switch ($method) {
     case 'GET':
-        $sql = "select * from $table".($key?" WHERE users_name='$key'":'');   //----------->>>WRONG OPTION
-        $result = $link->query($sql);                                 // You must avoid the SQL injection hack
-        break;
+        $sql = "select * from $table".($key?" WHERE users_name='$key'":'');   //------>>>WRONG OPTION
+        $result = $link->query($sql);                                 // this is testing app
+        break;                                                        // You MUST avoid the SQL injection hack
     case 'PUT':
         $sql = $link->prepare("update $table set users_name = :set where users_name=:key");
         $result = $sql->execute(array(':set' => $input, ':key' => $key));
@@ -51,7 +52,7 @@
         break;
     }
 
-    // die if SQL statement failed
+    // PRINT RESULTS
     if (!$result) {
         echo "\nIt didn't worked!!\n";
         http_response_code(404);
@@ -59,7 +60,6 @@
         exit;
     }
 
-    // PRINT RESULTS
     if ($method == 'GET') {
         foreach ($result as $row) {
             echo $row['users_name'] . "\n";
