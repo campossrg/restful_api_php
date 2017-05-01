@@ -16,33 +16,12 @@
     $table = array_shift($request);
     if($table === 'users'){
         $key = array_shift($request);
-        // if(empty($key)){
-        //     echo "\nKEY: empty\n";
-        // }
-        // else{
-        //     echo "\nKEY: " . $key . "\n";
-        // }
     } else {
         // Deny resources different to 'users'
         echo "Resource must be 'users'";
         header('HTTP/1.1 404 Not Found');
         exit;
     }
-
-    // return an array with all the input´s values
-    // $values = array_map(function ($value) {
-    //     if ($value===null) return null;
-    //     // if ($value['value']===null) return null;
-    //     echo "\n" . $value . "<---\n";
-    //     return $value;
-    // },$input);
-
-    // build the SET part of the SQL command
-    // $set = $values[0];
-    // for ($i=0;$i<count($columns);$i++) {
-    //     $set.=($i>0?',':'').'`'.$columns[$i].'`=';
-    //     $set.=($values[$i]===null?'NULL':'"'.$values[$i].'"');
-    // }
 
     // create SQL based on HTTP method
     switch ($method) {
@@ -51,11 +30,10 @@
         $result = $link->query($sql);                                 // You must avoid the SQL injection hack
         break;
     case 'PUT':
-        // $sentence = $link->prepare("update :table set :set where id= :key");
-        // $result = $sentence->execute(array(':table' => $table, ':set' => $set, ':key' => $key));
-        // break;
+        $sql = $link->prepare("update $table set users_name = :set where users_name=:key");
+        $result = $sql->execute(array(':set' => $input, ':key' => $key));
+        break;
     case 'POST':
-        echo $input;
         $sql = "select * from $table where users_name ='$input'";
         $result = $link->query($sql);
         if($result->rowCount() > 0){
@@ -89,7 +67,7 @@
     } elseif ($method == 'POST') {
         echo $input . " inserted succesfully";
     } else {
-        echo $input . " deleted succesfully";
+        echo $input . " modified succesfully";
     }
 
     $link = null; //close conn

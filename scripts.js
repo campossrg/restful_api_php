@@ -1,5 +1,6 @@
 function funcGET(){
     var search = $("#txt_search").val();
+
     $.ajax({
         url: 'api.php/users/' + search,
         type: 'GET',
@@ -22,22 +23,29 @@ function funcGET(){
 }
 
 function funcPOST(){
-    var data = JSON.stringify($("#txt_search").val());
-    $.ajax({
-        url: 'api.php/users',
-        type: 'POST',
-        data: data,
-        contentType: 'application/json',
-        dataType: 'json',
-        async: false,
-        complete: function(data) {
-            console.log(data.responseText);
-        }
-    });
+    var data = $("#txt_search").val();     //validate empty value
+    if(data){
+        data = JSON.stringify(data);
+
+        $.ajax({
+            url: 'api.php/users',
+            type: 'POST',
+            data: data,
+            contentType: 'application/json',
+            dataType: 'json',
+            async: false,
+            complete: function(data) {
+                console.log(data.responseText);
+                funcGET();
+            }
+        });
+    }
+
 }
 
 function funcDELETE(){
     var data = JSON.stringify($("#sel_results option:selected").text());
+
     $.ajax({
         url: 'api.php/users',
         type: 'DELETE',
@@ -46,8 +54,26 @@ function funcDELETE(){
         dataType: 'json',
         async: false,
         complete: function(data){
-            $("#sel_results option:selected").remove();
             console.log(data.responseText);
+            funcGET();
+        }
+    })
+}
+
+function funcPUT(){
+    var selected = $("#sel_results option:selected").text();
+    var data = JSON.stringify(prompt("Inserted the desired value for selected item:", selected));
+
+    $.ajax({
+        url: 'api.php/users/' + selected,
+        type: 'PUT',
+        data: data,
+        contentType: 'application/json',
+        dataType: 'json',
+        async: false,
+        complete: function(data){
+            console.log(data.responseText);
+            funcGET();
         }
     })
 }
